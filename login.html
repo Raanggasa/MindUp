@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk / Aktivasi - MindUp</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #0d6efd;
+            --dark-blue: #0a429b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
+
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: none;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .auth-row { min-height: 550px; }
+
+        /* Sidebar Kiri */
+        .auth-sidebar {
+            background: var(--primary-blue);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            height: 100%; 
+        }
+        
+        .auth-sidebar::after {
+            content: ''; position: absolute; top: -50px; right: -50px;
+            width: 200px; height: 200px; background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .auth-sidebar::before {
+            content: ''; position: absolute; bottom: -50px; left: -50px;
+            width: 150px; height: 150px; background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        /* Container Form Kanan */
+        .auth-form-container {
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+        }
+
+        /* --- Custom Styles Tombol Kembali --- */
+        .btn-back-home {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: #6c757d;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background-color: #f8f9fa;
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            width: fit-content;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back-home:hover {
+            background-color: #e9ecef;
+            color: var(--primary-blue);
+            transform: translateX(-5px);
+        }
+
+        /* Navigasi Tabs */
+        .nav-pills .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+            border-radius: 50px;
+            padding: 8px 20px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        /* Input Form Custom */
+        .form-control-custom {
+            background-color: #f8f9fa;
+            border: 1px solid #eee;
+            padding: 12px 15px;
+            border-radius: 10px;
+        }
+        .form-control-custom:focus {
+            background-color: white;
+            border-color: var(--primary-blue);
+            box-shadow: none;
+        }
+
+        /* Tombol Submit Custom */
+        .btn-primary-custom {
+            background-color: var(--primary-blue);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--dark-blue);
+        }
+
+        @media (max-width: 768px) {
+            .auth-sidebar { display: none; }
+            .auth-row { min-height: auto; }
+            .auth-form-container { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card auth-card">
+        <div class="row g-0 auth-row">
+            
+            <div class="col-md-5">
+                <div class="auth-sidebar">
+                    <div style="z-index: 2;">
+                        <h3 class="fw-bold mb-3"><i class="bi bi-layers-half me-2"></i>MindUp</h3>
+                        <p class="opacity-75 mb-4">Platform resiliensi siswa berbasis NLP dan jurnal refleksi digital.</p>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-check-circle-fill me-3"></i>
+                            <small>Akses Materi Seumur Hidup</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-check-circle-fill me-3"></i>
+                            <small>Privasi Jurnal Terjamin</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill me-3"></i>
+                            <small>Teknik Relaksasi Audio</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="auth-form-container">
+                    
+                    <a href="index.html" class="btn-back-home">
+                        <i class="bi bi-arrow-left me-2"></i> Kembali ke Beranda
+                    </a>
+
+                    <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button">Masuk</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button">Aktivasi Baru</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        
+                        <div class="tab-pane fade show active" id="pills-login">
+                            <h4 class="fw-bold mb-1">Selamat Datang Kembali!</h4>
+                            <p class="text-muted small mb-4">Silakan masuk sesuai role Anda.</p>
+                            
+                            <form onsubmit="handleLogin(event)">
+                                <div class="mb-3">
+                                    <label class="small fw-bold text-muted">Username / Email</label>
+                                    <input type="text" id="loginUsername" class="form-control form-control-custom" placeholder="Masukkan Username" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="small fw-bold text-muted">Password</label>
+                                    <input type="password" id="loginPassword" class="form-control form-control-custom" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-primary-custom text-white shadow-sm">
+                                    Masuk Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </form>
+                            <p class="text-center mt-3 small">
+                                <a href="#" class="text-decoration-none text-muted">Lupa password?</a>
+                            </p>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-register">
+                            <h4 class="fw-bold mb-1">Aktivasi Akun Siswa</h4>
+                            <p class="text-muted small mb-4">Gunakan Token Sekolah yang diberikan Guru BK.</p>
+                            
+                            <form onsubmit="handleActivation(event)">
+                                <div class="mb-3">
+                                    <label class="small fw-bold text-primary">KODE / TOKEN SEKOLAH</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-key"></i></span>
+                                        <input type="text" id="schoolToken" class="form-control form-control-custom border-start-0" placeholder="Contoh: SMA-BIMA-2025" required style="text-transform: uppercase;">
+                                    </div>
+                                    <div class="form-text small text-danger fst-italic">*Wajib diisi dengan benar.</div>
+                                </div>
+
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="small fw-bold text-muted">Nama Lengkap</label>
+                                        <input type="text" class="form-control form-control-custom" placeholder="Nama Kamu" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="small fw-bold text-muted">NIS</label>
+                                        <input type="text" class="form-control form-control-custom" placeholder="Nomor Induk" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="small fw-bold text-muted">Buat Password</label>
+                                    <input type="password" class="form-control form-control-custom" placeholder="••••••••" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-primary-custom text-white shadow-sm">
+                                    Aktivasi Akun <i class="bi bi-check-lg ms-2"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // --- 1. LOGIKA LOGIN SIMULASI MULTI-ROLE (UPDATED) ---
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const user = document.getElementById('loginUsername').value;
+            const pass = document.getElementById('loginPassword').value;
+
+            // Database Palsu dengan Struktur Folder Baru
+            const users = {
+                // Siswa -> folder 'siswa'
+                siswa: { u: 'siswa', p: 'siswa123', url: 'siswa/index.html', role: 'Siswa' },
+                
+                // Guru/Instansi -> folder 'instansi'
+                guru:  { u: 'guru',  p: 'guru123',  url: 'instansi/index.html', role: 'Instansi / Guru BK' },
+                
+                // Admin -> folder 'superadmin'
+                admin: { u: 'admin', p: 'admin123', url: 'superadmin/index.html', role: 'Super Admin' }
+            };
+
+            let validUser = null;
+
+            if (user === users.siswa.u && pass === users.siswa.p) validUser = users.siswa;
+            else if (user === users.guru.u && pass === users.guru.p) validUser = users.guru;
+            else if (user === users.admin.u && pass === users.admin.p) validUser = users.admin;
+
+            if (validUser) {
+                Swal.fire({
+                    title: `Login Berhasil!`,
+                    text: `Selamat datang, ${validUser.role}. Mengalihkan...`,
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    didOpen: () => { Swal.showLoading(); }
+                }).then(() => {
+                    localStorage.setItem('userRole', validUser.role);
+                    localStorage.setItem('isLoggedIn', 'true');
+                    
+                    // Redirect ke folder yang sesuai
+                    window.location.href = validUser.url;
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal',
+                    text: 'Username atau Password salah!',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        }
+
+        // --- 2. LOGIKA AKTIVASI TOKEN (UPDATED) ---
+        function handleActivation(e) {
+            e.preventDefault();
+
+            const tokenInput = document.getElementById('schoolToken').value.toUpperCase();
+            const VALID_TOKEN = "SMA-BIMA-2025"; 
+
+            if (tokenInput === VALID_TOKEN) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Aktivasi Berhasil!',
+                    text: 'Selamat! Akun sekolah Anda telah aktif.',
+                    confirmButtonText: 'Masuk ke Dashboard',
+                    confirmButtonColor: '#0d6efd'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Aktivasi siswa baru juga masuk ke folder siswa
+                        window.location.href = 'siswa/index.html';
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Token Tidak Valid',
+                    text: 'Kode sekolah salah atau sudah kadaluarsa. Silakan hubungi Guru BK.',
+                    confirmButtonColor: '#dc3545'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
