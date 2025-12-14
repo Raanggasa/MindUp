@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruang Belajar - MindUp</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* KONSISTENSI WARNA */
+            --primary-blue: #0d6efd; 
+            --dark-blue: #0a429b;
+            --light-blue-bg: #f0f7ff;
+            
+            /* Warna Netral Modern */
+            --slate-50: #f8fafc;
+            --slate-200: #e2e8f0;
+            --slate-600: #475569;
+            --slate-800: #1e293b;
+            --emerald-500: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--slate-50);
+            /* REVISI: Samakan dengan index.html (80px) agar tidak terlalu turun */
+            padding-top: 80px; 
+            color: var(--slate-800);
+        }
+
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 600; }
+
+        /* --- 1. NAVBAR (REVISI UKURAN) --- */
+        .navbar {
+            /* REVISI: Hapus padding berlebih agar tinggi sama dengan index.html */
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+            min-height: 70px; /* Menjaga konsistensi tinggi minimum */
+        }
+        
+        .nav-profile-img { 
+            width: 40px; height: 40px; border-radius: 50%; object-fit: cover; 
+            border: 2px solid var(--primary-blue); 
+        }
+
+        /* Tombol Kembali (Disesuaikan agar pas di navbar standar) */
+        .btn-nav-back {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; /* Sedikit diperkecil agar navbar tidak melebar */
+            background-color: var(--light-blue-bg);
+            color: var(--primary-blue);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .btn-nav-back:hover {
+            background-color: var(--primary-blue);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        /* --- 2. SIDEBAR LIST --- */
+        .sidebar-card {
+            background: white; border: 1px solid var(--slate-200);
+            border-radius: 16px; 
+            position: sticky; top: 100px; /* Disesuaikan dengan padding-top body baru */
+            overflow: hidden;
+        }
+        .module-item {
+            padding: 16px 20px;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+        }
+        .module-item:hover { background-color: var(--light-blue-bg); }
+        
+        .module-item.active {
+            background-color: var(--light-blue-bg);
+            border-left-color: var(--primary-blue);
+        }
+        .module-item.active .module-title { color: var(--primary-blue); font-weight: 700; }
+        
+        .module-icon { 
+            width: 32px; height: 32px; border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center;
+            background: #f1f5f9; color: #64748b;
+        }
+        .module-item.active .module-icon { background: var(--primary-blue); color: white; }
+
+        /* --- 3. KONTEN UTAMA --- */
+        .content-card {
+            background: white; border-radius: 20px; 
+            border: 1px solid var(--slate-200);
+            padding: 40px;
+            min-height: 600px;
+        }
+        
+        .article-content { line-height: 1.8; color: var(--slate-600); font-size: 1.05rem; }
+        .article-content h3 { 
+            color: var(--slate-800); font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem;
+        }
+        
+        .highlight-box {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 12px;
+            padding: 20px;
+            color: #065f46;
+            margin: 25px 0;
+        }
+
+        /* --- 4. TOMBOL NAVIGASI MODERN --- */
+        .action-bar {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--slate-200);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-modern {
+            display: flex; align-items: center; justify-content: center;
+            padding: 0; 
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            transition: all 0.2s ease;
+            width: 100%; 
+            height: 54px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-prev {
+            background-color: white; 
+            color: var(--slate-600);
+            border: 2px solid var(--slate-200);
+        }
+        .btn-prev:hover:not(:disabled) { border-color: var(--slate-600); color: var(--slate-800); }
+        .btn-prev:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-next {
+            background-color: var(--primary-blue); color: white;
+        }
+        .btn-next:hover { background-color: var(--dark-blue); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3); }
+
+        .btn-done {
+            background-color: var(--emerald-500); color: white;
+        }
+        .btn-done:hover { background-color: #059669; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+
+        @media (max-width: 768px) {
+            .action-bar { grid-template-columns: 1fr; gap: 12px; } 
+            .sidebar-card { display: none; }
+            .content-card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a href="index.html" class="btn-nav-back text-decoration-none">
+                <i class="bi bi-arrow-left me-2"></i>Kembali ke Beranda
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <span class="me-2 d-none d-lg-block text-dark fw-bold" id="navUserName">Siswa MindUp</span>
+                            <img src="https://ui-avatars.com/api/?name=Siswa+M&background=0d6efd&color=fff" alt="Profile" class="nav-profile-img">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                            <li><a class="dropdown-item" href="profil.html"><i class="bi bi-person me-2"></i>Profil Saya</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row">
+            
+            <div class="col-lg-4 d-none d-lg-block">
+                <div class="sidebar-card shadow-sm">
+                    <div class="p-3 border-bottom bg-white">
+                        <h6 class="fw-bold m-0 text-uppercase small text-muted ls-1">Kurikulum Resiliensi</h6>
+                    </div>
+                    <div id="moduleList">
+                        </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="content-card shadow-sm">
+                    
+                    <div class="mb-4 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-light text-primary border mb-2 px-3 py-2 rounded-pill fw-normal" id="mCategory">TEXT</span>
+                            <span class="text-muted small d-flex align-items-center"><i class="bi bi-clock me-1"></i> <span id="mDuration">10 Menit</span></span>
+                        </div>
+                        <h1 class="fw-bold text-dark display-6 mb-0" id="mTitle">Memuat Materi...</h1>
+                    </div>
+
+                    <div id="audioContainer" class="bg-light p-4 rounded-4 mb-4 border d-none">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-white p-2 rounded-circle shadow-sm me-3 text-primary">
+                                <i class="bi bi-headphones fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Audio Panduan Terapi</h6>
+                                <small class="text-muted">Disarankan menggunakan headset.</small>
+                            </div>
+                        </div>
+                        <audio controls id="mainAudio" class="w-100" style="height: 40px;">
+                            <source src="" type="audio/mpeg">
+                        </audio>
+                    </div>
+
+                    <div class="article-content" id="mContent">
+                        </div>
+
+                    <div class="action-bar">
+                        <button class="btn-modern btn-prev" id="btnPrev">
+                            <i class="bi bi-arrow-left me-2"></i> Sebelumnya
+                        </button>
+                        
+                        <button class="btn-modern btn-done" onclick="markAsDone()">
+                            <i class="bi bi-check-circle-fill me-2"></i> Selesai
+                        </button>
+
+                        <button class="btn-modern btn-next" id="btnNext">
+                            Selanjutnya <i class="bi bi-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // --- LOGOUT LOGIC ---
+        function handleLogout() {
+            Swal.fire({
+                title: 'Keluar?',
+                text: "Sesi Anda akan diakhiri.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.clear(); 
+                    window.location.href = '../login.html'; 
+                }
+            });
+        }
+
+        // --- 1. KONTEN MATERI (PSIKOLOGI VALID) ---
+        const modulesData = [
+            {
+                id: 1,
+                title: "Fondasi Resiliensi: The 7 Cs",
+                type: "Teori Dasar",
+                category: "text",
+                duration: "10 Menit",
+                content: `
+                    <p class="lead text-dark">Resiliensi adalah "otot mental" yang bisa dilatih. Mari pahami dasarnya.</p>
+                    <h3>Apa itu Resiliensi?</h3>
+                    <p>Resiliensi bukan berarti kebal terhadap stres. Resiliensi adalah kemampuan untuk beradaptasi dan bangkit kembali (bounce back) setelah mengalami kesulitan, trauma, atau tekanan berat. Seperti pegas yang ditekan, ia menyimpan energi untuk melompat lebih tinggi.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>Model 7C Resiliensi (Dr. Ken Ginsburg):</strong>
+                        <ul class="mb-0 mt-2">
+                            <li><strong>Competence:</strong> Perasaan "Aku Bisa" menangani masalah.</li>
+                            <li><strong>Confidence:</strong> Percaya pada kemampuan diri sendiri.</li>
+                            <li><strong>Connection:</strong> Memiliki support system (teman/keluarga).</li>
+                            <li><strong>Character:</strong> Integritas diri yang kuat.</li>
+                            <li><strong>Contribution:</strong> Memberi dampak positif ke orang lain.</li>
+                            <li><strong>Coping:</strong> Kemampuan mengelola stres.</li>
+                            <li><strong>Control:</strong> Menyadari kita punya kendali atas reaksi kita.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "State Awareness: Name it to Tame it",
+                type: "Audio Edukasi",
+                category: "audio",
+                duration: "15 Menit",
+                audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+                content: `
+                    <p>Istilah <em>"Name it to Tame it"</em> (Namai untuk Menjinakkannya) dipopulerkan oleh psikiater Dr. Dan Siegel.</p>
+                    <h3>Otak Kita Saat Stres</h3>
+                    <p>Saat kita marah besar atau panik, bagian otak bernama <strong>Amygdala</strong> membajak logika kita. Kita jadi sulit berpikir jernih.</p>
+                    <p>Namun, riset otak menunjukkan bahwa ketika kita berhasil <strong>memberi nama</strong> pada emosi tersebut (misal: "Saya sedang merasa Terhina"), aktivitas Amygdala langsung menurun.</p>
+                    <h3>Latihan Audio:</h3>
+                    <p>Dengarkan panduan di atas untuk belajar memindai tubuh dan emosimu. Jangan dilawan, cukup sadari dan beri nama.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Teknik Anchor: Tombol Tenang",
+                type: "Teknik NLP",
+                category: "audio",
+                duration: "8 Menit",
+                audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                content: `
+                    <p><strong>Anchoring</strong> adalah teknik NLP untuk memprogram sistem saraf kita agar bisa memanggil perasaan tenang kapan saja.</p>
+                    <h3>Instruksi Praktis:</h3>
+                    <ol>
+                        <li><strong>Recall:</strong> Ingat momen saat kamu merasa SANGAT percaya diri atau juara.</li>
+                        <li><strong>Intensify:</strong> Perjelas gambaran itu di pikiranmu. Rasakan suaranya, warnanya.</li>
+                        <li><strong>Anchor:</strong> Saat perasaan itu memuncak, buat gerakan unik (misal: kepalkan tangan kiri). Tahan 5 detik.</li>
+                        <li><strong>Break:</strong> Lepaskan dan rileks.</li>
+                    </ol>
+                    <div class="highlight-box">
+                        Lakukan ini 10x. Nanti, saat kamu gugup sebelum ujian, cukup kepalkan tangan kiri, dan otakmu akan memanggil rasa percaya diri itu secara otomatis.
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "CBT: Cognitive Reframing",
+                type: "Terapi Kognitif",
+                category: "text",
+                duration: "12 Menit",
+                content: `
+                    <p>Pikiran negatif seringkali bohong. Dalam CBT, kita belajar menantang pikiran tersebut.</p>
+                    <h3>Contoh Reframing (Bingkai Ulang):</h3>
+                    <table class="table table-bordered mt-3">
+                        <thead class="table-light"><tr><th>Pikiran Negatif (Distorsi)</th><th>Pikiran Realistis (Reframing)</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>"Saya gagal satu ujian, saya bodoh."</td>
+                                <td>"Saya gagal di satu ujian ini, tapi saya bagus di pelajaran lain. Saya perlu belajar lebih baik."</td>
+                            </tr>
+                            <tr>
+                                <td>"Semua orang melihat kesalahanku."</td>
+                                <td>"Orang lain sibuk dengan diri mereka sendiri. Kesalahan ini wajar dan manusiawi."</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `
+            },
+            {
+                id: 5,
+                title: "Manajemen Stres: Box Breathing",
+                type: "Video Simulasi",
+                category: "video",
+                duration: "20 Menit",
+                content: `
+                    <div class="ratio ratio-16x9 mb-4 rounded-4 overflow-hidden shadow-sm">
+                         <iframe src="https://www.youtube.com/embed/grfXR6jX4j8" title="Box Breathing" allowfullscreen></iframe>
+                    </div>
+                    <h3>Teknik Pernapasan Kotak</h3>
+                    <p>Ini adalah teknik P3K saat kamu merasa panik atau jantung berdebar kencang.</p>
+                    <ul>
+                        <li>Tarik napas (4 detik)</li>
+                        <li>Tahan napas (4 detik)</li>
+                        <li>Hembuskan (4 detik)</li>
+                        <li>Tahan kosong (4 detik)</li>
+                    </ul>
+                    <p>Ulangi siklus ini 4 kali untuk mereset sistem saraf parasimpatis kamu.</p>
+                `
+            },
+            {
+                id: 6,
+                title: "Empati: Perspektif Orang Lain",
+                type: "Soft Skills",
+                category: "text",
+                duration: "10 Menit",
+                content: `
+                    <p>Hubungan sosial yang sehat adalah kunci resiliensi.</p>
+                    <h3>Latihan: Posisi Persepsi</h3>
+                    <p>Saat berkonflik dengan teman, cobalah duduk di kursi lain dan bayangkan kamu adalah dia:</p>
+                    <ul>
+                        <li>Apa yang dia lihat?</li>
+                        <li>Apa ketakutan terbesarnya?</li>
+                        <li>Apa yang dia butuhkan darimu?</li>
+                    </ul>
+                    <div class="highlight-box">
+                        Seringkali, orang yang marah sebenarnya sedang merasa takut atau tidak didengar.
+                    </div>
+                `
+            }
+        ];
+
+        // --- 2. LOGIKA RENDER ---
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 1;
+
+        function loadModule(id) {
+            const data = modulesData.find(m => m.id === id);
+            if (!data) return;
+
+            // Render Header
+            document.getElementById('mTitle').innerText = data.title;
+            document.getElementById('mCategory').innerText = data.type;
+            document.getElementById('mDuration').innerText = data.duration;
+            document.getElementById('mContent').innerHTML = data.content;
+
+            // Render Audio
+            const audioDiv = document.getElementById('audioContainer');
+            const audioTag = document.getElementById('mainAudio');
+            
+            if (data.category === 'audio' && data.audioSrc) {
+                audioDiv.classList.remove('d-none');
+                audioTag.src = data.audioSrc;
+            } else {
+                audioDiv.classList.add('d-none');
+                audioTag.pause();
+            }
+
+            // Render Sidebar
+            const listContainer = document.getElementById('moduleList');
+            listContainer.innerHTML = '';
+            modulesData.forEach(mod => {
+                const isActive = mod.id === currentId ? 'active' : '';
+                const icon = mod.category === 'audio' ? 'bi-play-fill' : (mod.category === 'video' ? 'bi-film' : 'bi-book');
+                
+                listContainer.innerHTML += `
+                    <div class="module-item ${isActive} d-flex align-items-center" onclick="goToModule(${mod.id})">
+                        <div class="module-icon me-3">
+                            <i class="bi ${icon}"></i>
+                        </div>
+                        <div>
+                            <div class="module-title small text-dark">${mod.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            updateButtons();
+            window.scrollTo(0, 0);
+        }
+
+        // --- 3. NAVIGASI ---
+        function goToModule(id) {
+            currentId = id;
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + id;
+            window.history.pushState({path:newUrl},'',newUrl);
+            loadModule(id);
+        }
+
+        function updateButtons() {
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const currentIndex = modulesData.findIndex(m => m.id === currentId);
+
+            // Prev
+            if (currentIndex > 0) {
+                btnPrev.disabled = false;
+                btnPrev.onclick = () => goToModule(modulesData[currentIndex - 1].id);
+            } else {
+                btnPrev.disabled = true;
+            }
+
+            // Next
+            if (currentIndex < modulesData.length - 1) {
+                btnNext.innerHTML = 'Selanjutnya <i class="bi bi-arrow-right ms-2"></i>';
+                btnNext.onclick = () => goToModule(modulesData[currentIndex + 1].id);
+            } else {
+                btnNext.innerHTML = 'Halaman Depan <i class="bi bi-house ms-2"></i>';
+                btnNext.onclick = () => window.location.href = 'index.html';
+            }
+        }
+
+        function markAsDone() {
+            Swal.fire({
+                title: 'Hebat!',
+                text: 'Materi ini telah ditandai selesai.',
+                icon: 'success',
+                confirmButtonColor: '#0d6efd', // Warna Biru MindUp
+                confirmButtonText: 'Lanjut',
+                timer: 1500
+            }).then(() => {
+                const currentIndex = modulesData.findIndex(m => m.id === currentId);
+                if (currentIndex < modulesData.length - 1) {
+                    goToModule(modulesData[currentIndex + 1].id);
+                }
+            });
+        }
+
+        // --- 4. INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const userName = localStorage.getItem('userName') || 'Sobat MinUp';
+            document.getElementById('navUserName').innerText = userName;
+            loadModule(currentId);
+        });
+
+    </script>
+</body>
+</html>
