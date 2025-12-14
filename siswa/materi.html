@@ -28,19 +28,17 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--slate-50);
-            /* REVISI: Samakan dengan index.html (80px) agar tidak terlalu turun */
             padding-top: 80px; 
             color: var(--slate-800);
         }
 
         h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 600; }
 
-        /* --- 1. NAVBAR (REVISI UKURAN) --- */
+        /* --- 1. NAVBAR --- */
         .navbar {
-            /* REVISI: Hapus padding berlebih agar tinggi sama dengan index.html */
             background-color: white;
             box-shadow: 0 2px 15px rgba(0,0,0,0.03);
-            min-height: 70px; /* Menjaga konsistensi tinggi minimum */
+            min-height: 70px;
         }
         
         .nav-profile-img { 
@@ -48,10 +46,9 @@
             border: 2px solid var(--primary-blue); 
         }
 
-        /* Tombol Kembali (Disesuaikan agar pas di navbar standar) */
         .btn-nav-back {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 6px 16px; /* Sedikit diperkecil agar navbar tidak melebar */
+            padding: 6px 16px;
             background-color: var(--light-blue-bg);
             color: var(--primary-blue);
             border-radius: 50px;
@@ -71,7 +68,7 @@
         .sidebar-card {
             background: white; border: 1px solid var(--slate-200);
             border-radius: 16px; 
-            position: sticky; top: 100px; /* Disesuaikan dengan padding-top body baru */
+            position: sticky; top: 100px;
             overflow: hidden;
         }
         .module-item {
@@ -107,15 +104,18 @@
         .article-content h3 { 
             color: var(--slate-800); font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem;
         }
+        .article-content ul, .article-content ol { margin-bottom: 1.5rem; }
+        .article-content li { margin-bottom: 0.5rem; }
         
         .highlight-box {
             background-color: #ecfdf5;
             border: 1px solid #a7f3d0;
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             color: #065f46;
             margin: 25px 0;
         }
+        .highlight-box h5 { color: #047857; margin-bottom: 15px; font-weight: 700; }
 
         /* --- 4. TOMBOL NAVIGASI MODERN --- */
         .action-bar {
@@ -279,138 +279,161 @@
             });
         }
 
-        // --- 1. KONTEN MATERI (PSIKOLOGI VALID) ---
+        // --- 1. KONTEN MATERI LENGKAP & MENDALAM (DARI PDF KURIKULUM RESILIENSI) ---
         const modulesData = [
             {
                 id: 1,
-                title: "Fondasi Resiliensi: The 7 Cs",
+                title: "Pengenalan Resiliensi & Definisi NLP",
                 type: "Teori Dasar",
                 category: "text",
-                duration: "10 Menit",
+                duration: "15 Menit",
                 content: `
-                    <p class="lead text-dark">Resiliensi adalah "otot mental" yang bisa dilatih. Mari pahami dasarnya.</p>
-                    <h3>Apa itu Resiliensi?</h3>
-                    <p>Resiliensi bukan berarti kebal terhadap stres. Resiliensi adalah kemampuan untuk beradaptasi dan bangkit kembali (bounce back) setelah mengalami kesulitan, trauma, atau tekanan berat. Seperti pegas yang ditekan, ia menyimpan energi untuk melompat lebih tinggi.</p>
+                    [cite_start]<p class="lead text-dark">Di era globalisasi dan perkembangan teknologi yang cepat ini, siswa sering kali menghadapi tekanan akademik, sosial, dan emosional yang tinggi[cite: 18]. Kondisi ini dapat mempengaruhi keseimbangan mental. [cite_start]Oleh karena itu, kita membutuhkan <strong>Resiliensi</strong>—kemampuan untuk tetap tangguh, optimis, serta mampu beradaptasi dengan perubahan[cite: 19, 20].</p>
                     
+                    <h3>Mengapa Menggunakan NLP?</h3>
+                    [cite_start]<p>Neuro-Linguistic Programming (NLP) dikembangkan pada tahun 1970-an oleh Richard Bandler dan John Grinder[cite: 22]. [cite_start]Pendekatan ini dipilih karena kemampuannya mengintegrasikan pola pikir, bahasa, dan perilaku untuk membantu individu mentransformasikan pengalaman hidup secara positif[cite: 10].</p>
+
+                    <h3>Bedah Anatomi NLP</h3>
+                    <p>Istilah NLP terdiri dari tiga komponen utama yang saling terhubung:</p>
                     <div class="highlight-box">
-                        <strong>Model 7C Resiliensi (Dr. Ken Ginsburg):</strong>
-                        <ul class="mb-0 mt-2">
-                            <li><strong>Competence:</strong> Perasaan "Aku Bisa" menangani masalah.</li>
-                            <li><strong>Confidence:</strong> Percaya pada kemampuan diri sendiri.</li>
-                            <li><strong>Connection:</strong> Memiliki support system (teman/keluarga).</li>
-                            <li><strong>Character:</strong> Integritas diri yang kuat.</li>
-                            <li><strong>Contribution:</strong> Memberi dampak positif ke orang lain.</li>
-                            <li><strong>Coping:</strong> Kemampuan mengelola stres.</li>
-                            <li><strong>Control:</strong> Menyadari kita punya kendali atas reaksi kita.</li>
+                        <ul>
+                            [cite_start]<li><strong>Neuro (N):</strong> Berkaitan dengan sistem saraf dan panca indra (visual, auditori, kinestetik)[cite: 54, 61]. Ini adalah "corong" bagaimana kita menerima informasi dari dunia luar.</li>
+                            [cite_start]<li><strong>Linguistic (L):</strong> Mengacu pada kemampuan komunikasi, baik verbal (pilihan kata/frase) maupun non-verbal (bahasa tubuh, postur, gerak mata)[cite: 55, 56, 62]. Bahasa mempengaruhi pikiran bawah sadar kita.</li>
+                            [cite_start]<li><strong>Programming (P):</strong> Mengacu pada pola pikir, perasaan, dan tindakan yang sudah "terprogram" dalam diri kita[cite: 58]. [cite_start]Berita baiknya: perilaku dan kebiasaan lama bisa diganti (reprogram) dengan kebiasaan baru yang lebih positif[cite: 59].</li>
                         </ul>
                     </div>
+                    
+                    <h3>Tujuan Pembelajaran Modul Ini</h3>
+                    [cite_start]<p>Tujuan utama integrasi ini adalah membentuk individu yang tangguh secara mental, adaptif terhadap tantangan, dan memiliki pola pikir yang memberdayakan dalam kehidupan sehari-hari[cite: 11, 26].</p>
                 `
             },
             {
                 id: 2,
-                title: "State Awareness: Name it to Tame it",
-                type: "Audio Edukasi",
-                category: "audio",
+                title: "Prinsip Dasar & 4 Pilar Utama NLP",
+                type: "Konsep Inti",
+                category: "text",
                 duration: "15 Menit",
-                audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
                 content: `
-                    <p>Istilah <em>"Name it to Tame it"</em> (Namai untuk Menjinakkannya) dipopulerkan oleh psikiater Dr. Dan Siegel.</p>
-                    <h3>Otak Kita Saat Stres</h3>
-                    <p>Saat kita marah besar atau panik, bagian otak bernama <strong>Amygdala</strong> membajak logika kita. Kita jadi sulit berpikir jernih.</p>
-                    <p>Namun, riset otak menunjukkan bahwa ketika kita berhasil <strong>memberi nama</strong> pada emosi tersebut (misal: "Saya sedang merasa Terhina"), aktivitas Amygdala langsung menurun.</p>
-                    <h3>Latihan Audio:</h3>
-                    <p>Dengarkan panduan di atas untuk belajar memindai tubuh dan emosimu. Jangan dilawan, cukup sadari dan beri nama.</p>
+                    <h3>Presupposisi: Peta Bukanlah Wilayah</h3>
+                    [cite_start]<p>Salah satu asumsi dasar (presupposisi) terpenting dalam NLP adalah: <em>"The Map is Not the Territory"</em> (Peta bukanlah wilayah yang sebenarnya)[cite: 66].</p>
+                    [cite_start]<p>Artinya, apa yang kita persepsikan tentang dunia hanyalah representasi subjektif (peta) kita sendiri, bukan realitas mutlak[cite: 66]. [cite_start]Setiap orang merespons peristiwa berdasarkan "peta internal" mereka sendiri, yang dipengaruhi oleh keyakinan dan filter mental masing-masing[cite: 68].</p>
+                    <p><strong>Implikasinya:</strong> Jika kita mengubah cara pandang (peta) kita terhadap masalah, maka perasaan dan respon kita terhadap masalah tersebut juga akan berubah.</p>
+
+                    <h3>4 Pilar Utama Keberhasilan NLP</h3>
+                    [cite_start]<p>NLP memiliki empat pilar yang membentuk siklus dinamis untuk mencapai hasil yang efektif[cite: 73]:</p>
+                    <div class="highlight-box">
+                        <ol>
+                            <li><strong>Rapport (Hubungan Harmonis):</strong> Kemampuan membangun kedekatan dan kepercayaan dengan orang lain. [cite_start]Tanpa rapport, komunikasi sulit terjadi[cite: 73].</li>
+                            [cite_start]<li><strong>Sensory Acuity (Kepekaan Indera):</strong> Kemampuan untuk peka membaca tanda-tanda non-verbal dari orang lain atau lingkungan (seperti perubahan napas, warna wajah, atau nada suara)[cite: 73].</li>
+                            <li><strong>Outcome (Tujuan Jelas):</strong> Mengetahui dengan spesifik apa yang ingin dicapai. [cite_start]Fokus pada hasil (outcome oriented), bukan pada masalah[cite: 73].</li>
+                            <li><strong>Behavioral Flexibility (Fleksibilitas Perilaku):</strong> Kemampuan untuk mengubah cara bertindak. [cite_start]Prinsipnya: "Orang dengan fleksibilitas paling tinggi akan mengendalikan sistem"[cite: 70, 73]. Jika satu cara gagal, coba cara lain.</li>
+                        </ol>
+                    </div>
                 `
             },
             {
                 id: 3,
-                title: "Teknik Anchor: Tombol Tenang",
+                title: "Teknik Reframing (Membingkai Ulang)",
                 type: "Teknik NLP",
-                category: "audio",
-                duration: "8 Menit",
-                audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                category: "text",
+                duration: "20 Menit",
                 content: `
-                    <p><strong>Anchoring</strong> adalah teknik NLP untuk memprogram sistem saraf kita agar bisa memanggil perasaan tenang kapan saja.</p>
-                    <h3>Instruksi Praktis:</h3>
-                    <ol>
-                        <li><strong>Recall:</strong> Ingat momen saat kamu merasa SANGAT percaya diri atau juara.</li>
-                        <li><strong>Intensify:</strong> Perjelas gambaran itu di pikiranmu. Rasakan suaranya, warnanya.</li>
-                        <li><strong>Anchor:</strong> Saat perasaan itu memuncak, buat gerakan unik (misal: kepalkan tangan kiri). Tahan 5 detik.</li>
-                        <li><strong>Break:</strong> Lepaskan dan rileks.</li>
-                    </ol>
+                    <h3>Definisi Reframing</h3>
+                    [cite_start]<p>Reframing adalah teknik untuk mengubah sudut pandang atau makna dari suatu peristiwa, perilaku, atau situasi[cite: 146]. [cite_start]Teknik ini didasari prinsip bahwa <em>"Makna beroperasi tergantung pada konteksnya"</em>[cite: 69].</p>
+                    
+                    <h3>Mengapa Perlu Reframing?</h3>
+                    <p>Seringkali kita terjebak dalam emosi negatif karena memberi makna buruk pada suatu kejadian. [cite_start]Dengan reframing, kita melatih otak untuk mencari makna lain yang lebih memberdayakan, sehingga kita bisa keluar dari kondisi negatif[cite: 69].</p>
+                    
                     <div class="highlight-box">
-                        Lakukan ini 10x. Nanti, saat kamu gugup sebelum ujian, cukup kepalkan tangan kiri, dan otakmu akan memanggil rasa percaya diri itu secara otomatis.
+                        <h5>Contoh Penerapan Nyata:</h5>
+                        <p><strong>Situasi:</strong> Anda mengalami kegagalan dalam ujian atau kompetisi.</p>
+                        <ul>
+                            <li><strong>Bingkai Lama (Negatif):</strong> "Saya gagal total. Ini akhir dari segalanya. Saya memang tidak mampu." (Respon: Sedih, putus asa).</li>
+                            <li><strong>Reframing (Positif):</strong> "Kegagalan ini bukanlah akhir, melainkan sebuah umpan balik (feedback). Ini memberitahu saya bahwa strategi belajar saya perlu diperbaiki. Ini adalah kesempatan belajar agar saya lebih siap di masa depan." (Respon: Termotivasi, evaluasi diri) [cite_start][cite: 147].</li>
+                        </ul>
                     </div>
+                    <p>Ingat, reframing bukan membohongi diri sendiri, tapi memilih perspektif yang membuat Anda lebih berdaya untuk bertindak.</p>
                 `
             },
             {
                 id: 4,
-                title: "CBT: Cognitive Reframing",
-                type: "Terapi Kognitif",
-                category: "text",
-                duration: "12 Menit",
+                title: "Teknik Anchoring (Menanam Jangkar Emosi)",
+                type: "Praktik",
+                category: "audio",
+                duration: "15 Menit",
+                audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", 
                 content: `
-                    <p>Pikiran negatif seringkali bohong. Dalam CBT, kita belajar menantang pikiran tersebut.</p>
-                    <h3>Contoh Reframing (Bingkai Ulang):</h3>
-                    <table class="table table-bordered mt-3">
-                        <thead class="table-light"><tr><th>Pikiran Negatif (Distorsi)</th><th>Pikiran Realistis (Reframing)</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td>"Saya gagal satu ujian, saya bodoh."</td>
-                                <td>"Saya gagal di satu ujian ini, tapi saya bagus di pelajaran lain. Saya perlu belajar lebih baik."</td>
-                            </tr>
-                            <tr>
-                                <td>"Semua orang melihat kesalahanku."</td>
-                                <td>"Orang lain sibuk dengan diri mereka sendiri. Kesalahan ini wajar dan manusiawi."</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3>Apa itu Anchoring?</h3>
+                    [cite_start]<p>Anchoring adalah proses menghubungkan suatu keadaan emosi internal yang kuat (seperti rasa percaya diri, tenang, atau bahagia) dengan stimulus eksternal tertentu (gerakan tubuh atau kata-kata)[cite: 149].</p>
+                    [cite_start]<p>Tujuannya adalah agar Anda dapat memanggil kembali ("mengakses") rasa percaya diri atau ketenangan tersebut kapan saja saat dibutuhkan, hanya dengan memicu stimulus yang sudah dilatih[cite: 149].</p>
+                    
+                    <div class="highlight-box">
+                        <h5>Langkah-Langkah Praktik (Self-Anchoring):</h5>
+                        <ol>
+                            <li><strong>Recall (Mengingat):</strong> Tutup mata dan ingat kembali momen spesifik di masa lalu saat Anda merasa SANGAT percaya diri atau sangat bahagia.</li>
+                            <li><strong>Intensify (Memperkuat):</strong> Masuklah ke dalam ingatan itu. Lihat apa yang Anda lihat, dengar apa yang Anda dengar, dan rasakan perasaannya sekuat mungkin di tubuh Anda.</li>
+                            <li><strong>Anchor (Menjangkar):</strong> Tepat saat emosi tersebut mencapai puncaknya, lakukan gerakan unik yang jarang dilakukan (misalnya: menekan jempol dan jari tengah tangan kiri dengan kuat). [cite_start]Tahan selama 5-10 detik sambil menikmati perasaannya[cite: 149].</li>
+                            <li><strong>Break & Test:</strong> Lepaskan gerakan, buka mata, dan rileks (break state). Kemudian, coba lakukan gerakan tadi lagi. Jika berhasil, Anda akan merasakan kembali emosi positif tersebut muncul secara otomatis.</li>
+                        </ol>
+                    </div>
                 `
             },
             {
                 id: 5,
-                title: "Manajemen Stres: Box Breathing",
-                type: "Video Simulasi",
-                category: "video",
+                title: "Swish Pattern & Membangun Rapport",
+                type: "Teknik Lanjutan",
+                category: "text",
                 duration: "20 Menit",
                 content: `
-                    <div class="ratio ratio-16x9 mb-4 rounded-4 overflow-hidden shadow-sm">
-                         <iframe src="https://www.youtube.com/embed/grfXR6jX4j8" title="Box Breathing" allowfullscreen></iframe>
-                    </div>
-                    <h3>Teknik Pernapasan Kotak</h3>
-                    <p>Ini adalah teknik P3K saat kamu merasa panik atau jantung berdebar kencang.</p>
+                    <h3>1. Swish Pattern: Mengganti Kebiasaan Buruk</h3>
+                    [cite_start]<p>Teknik Swish Pattern digunakan untuk membantu siswa mengganti kebiasaan atau respon otomatis yang tidak produktif (seperti menunda-nunda tugas, gugup, atau merokok) dengan perilaku baru yang lebih baik[cite: 151].</p>
+                    <p>Caranya adalah dengan memvisualisasikan "gambar pemicu" (kebiasaan lama) dan secara cepat menukarnya dengan "gambar diri ideal" (perilaku baru). [cite_start]Otak dilatih untuk langsung beralih ke perilaku baru saat pemicu muncul[cite: 151].</p>
+
+                    <hr class="my-4">
+
+                    <h3>2. Rapport Building: Kunci Komunikasi</h3>
+                    <p>Rapport adalah kondisi di mana tercipta hubungan yang harmonis, saling percaya, dan responsif. [cite_start]Ini adalah dasar dari komunikasi efektif[cite: 152].</p>
+                    
+                    <h5>Teknik Membangun Rapport:</h5>
                     <ul>
-                        <li>Tarik napas (4 detik)</li>
-                        <li>Tahan napas (4 detik)</li>
-                        <li>Hembuskan (4 detik)</li>
-                        <li>Tahan kosong (4 detik)</li>
+                        <li><strong>Komunikasi Non-Verbal:</strong> Perhatikan bahasa tubuh lawan bicara. [cite_start]Gunakan kontak mata yang nyaman dan senyuman[cite: 153].</li>
+                        [cite_start]<li><strong>Matching & Mirroring:</strong> Secara halus menyamakan postur tubuh, gestur, atau nada suara dengan lawan bicara untuk menciptakan kesamaan[cite: 153].</li>
+                        [cite_start]<li><strong>Empati:</strong> Mendengarkan dengan tulus untuk memahami perasaan lawan bicara, bukan sekadar untuk menjawab[cite: 153].</li>
+                        [cite_start]<li><strong>Pacing & Leading:</strong> "Pacing" artinya menyelaraskan diri dengan ritme siswa/lawan bicara terlebih dahulu (mengikuti), baru kemudian "Leading" atau memimpin mereka ke arah perubahan yang diinginkan[cite: 74, 86].</li>
                     </ul>
-                    <p>Ulangi siklus ini 4 kali untuk mereset sistem saraf parasimpatis kamu.</p>
                 `
             },
             {
                 id: 6,
-                title: "Empati: Perspektif Orang Lain",
-                type: "Soft Skills",
+                title: "Strategi Belajar: Experiential Learning",
+                type: "Metodologi",
                 category: "text",
-                duration: "10 Menit",
+                duration: "15 Menit",
                 content: `
-                    <p>Hubungan sosial yang sehat adalah kunci resiliensi.</p>
-                    <h3>Latihan: Posisi Persepsi</h3>
-                    <p>Saat berkonflik dengan teman, cobalah duduk di kursi lain dan bayangkan kamu adalah dia:</p>
-                    <ul>
-                        <li>Apa yang dia lihat?</li>
-                        <li>Apa ketakutan terbesarnya?</li>
-                        <li>Apa yang dia butuhkan darimu?</li>
-                    </ul>
+                    <h3>Belajar dari Pengalaman (Learning by Doing)</h3>
+                    [cite_start]<p>Kurikulum NLP ini menerapkan prinsip <em>Experiential Learning</em>, yang menekankan bahwa pengetahuan paling efektif diperoleh melalui proses mengalami langsung, bukan sekadar teori hafalan[cite: 111, 95].</p>
+                    
                     <div class="highlight-box">
-                        Seringkali, orang yang marah sebenarnya sedang merasa takut atau tidak didengar.
+                        <h5>Siklus Pembelajaran 4 Tahap:</h5>
+                        <ol>
+                            [cite_start]<li><strong>Experience (Mengalami):</strong> Siswa diberikan simulasi, latihan mental, atau aktivitas yang memunculkan pengalaman emosional atau sosial tertentu[cite: 122].</li>
+                            <li><strong>Reflect (Merefleksikan):</strong> Siswa diajak menganalisis apa yang mereka rasakan, pikirkan, dan pelajari dari pengalaman tersebut. [cite_start]Introspeksi ini memperkuat kesadaran diri[cite: 124, 125, 98].</li>
+                            [cite_start]<li><strong>Conceptualize (Menarik Konsep):</strong> Guru membantu siswa menghubungkan pengalaman tadi dengan teori NLP (misalnya: "Oh, ternyata perasaan tenang tadi muncul karena teknik anchoring")[cite: 127].</li>
+                            [cite_start]<li><strong>Apply (Menerapkan):</strong> Siswa diminta menerapkan pemahaman dan keterampilan baru tersebut dalam situasi nyata di kehidupan sehari-hari (misal: saat menghadapi ujian atau konflik teman)[cite: 128].</li>
+                        </ol>
                     </div>
+
+                    <h3>Prinsip Metodologis Lainnya</h3>
+                    <ul>
+                        [cite_start]<li><strong>Kontekstual:</strong> Materi dikaitkan dengan situasi nyata siswa (ujian, pergaulan)[cite: 100].</li>
+                        [cite_start]<li><strong>Kolaboratif:</strong> Belajar dalam suasana saling mendukung dan empati[cite: 102].</li>
+                        [cite_start]<li><strong>Seimbang:</strong> Memadukan pemahaman konsep teori dengan latihan keterampilan praktik[cite: 105].</li>
+                    </ul>
                 `
             }
         ];
 
-        // --- 2. LOGIKA RENDER ---
+        // --- 2. LOGIKA RENDER (TIDAK BERUBAH) ---
         const urlParams = new URLSearchParams(window.location.search);
         let currentId = parseInt(urlParams.get('id')) || 1;
 
@@ -508,7 +531,7 @@
 
         // --- 4. INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            const userName = localStorage.getItem('userName') || 'Sobat MinUp';
+            const userName = localStorage.getItem('userName') || 'Sobat MindUp';
             document.getElementById('navUserName').innerText = userName;
             loadModule(currentId);
         });
