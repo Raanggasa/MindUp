@@ -7,11 +7,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='14' font-weight='bold' fill='%230d6efd'>◢◣</text></svg>">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
@@ -24,13 +21,22 @@
             --text-muted: #6c757d;
             --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
             --shadow-hover: 0 15px 35px rgba(13, 110, 253, 0.15);
-            --whatsapp-color: #25d366;
+            
+            /* Variabel Ukuran Kartu Testimoni (Responsive) */
+            --testi-card-width: 380px; 
+        }
+
+        /* Override variable untuk layar HP */
+        @media (max-width: 768px) {
+            :root {
+                --testi-card-width: 300px; /* Kartu lebih kecil di HP */
+            }
         }
 
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text-dark);
-            overflow-x: hidden; /* Mencegah scroll horizontal halaman utama */
+            overflow-x: hidden; 
         }
 
         h1, h2, h3, h4, h5, .navbar-brand, .btn {
@@ -47,10 +53,19 @@
         .navbar-brand { font-weight: 700; color: var(--primary-blue) !important; letter-spacing: -0.5px; }
         .nav-link { color: var(--text-dark); font-weight: 500; margin: 0 10px; }
         .nav-link:hover, .nav-link.active { color: var(--primary-blue); }
+        
+        /* Tombol Toggler Mobile yang lebih rapi */
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem 0.5rem;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none; /* Hilangkan highlight biru standar */
+        }
 
-        /* --- Hero Section (100vh) --- */
+        /* --- Hero Section --- */
         .hero-section {
-            padding-top: 80px; 
+            padding-top: 100px; /* Tambahan padding agar tidak ketutup navbar */
             background: linear-gradient(135deg, #ffffff 0%, var(--light-blue-bg) 100%);
             min-height: 100vh; 
             display: flex;
@@ -98,100 +113,56 @@
         .about-img { border-radius: 20px; box-shadow: var(--shadow-soft); }
         
         /* Flow Steps */
-        .step-card { text-align: center; position: relative; padding: 20px; }
+        .step-card { text-align: center; position: relative; padding: 10px; }
         .step-number {
             width: 50px; height: 50px; background-color: var(--primary-blue); color: white;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: 700; margin: 0 auto 1.5rem; position: relative; z-index: 2;
+            font-size: 1.2rem; font-weight: 700; margin: 0 auto 1rem; position: relative; z-index: 2;
         }
         .step-line::after {
             content: ''; position: absolute; top: 45px; left: 50%; width: 100%; height: 2px;
             background-color: #dee2e6; z-index: 1;
         }
         .step-card:last-child .step-line::after { display: none; }
-        @media (max-width: 991px) { .step-line::after { display: none; } .hero-title { font-size: 2.5rem; } }
 
-        /* --- FIXED INFINITE SCROLL TESTIMONIALS --- */
-        
-        /* Container utama full width */
+        /* --- FIXED RESPONSIVE TESTIMONIALS --- */
         .testimonial-full-width {
-            width: 100%;
-            overflow: hidden; /* Wajib: menyembunyikan scrollbar horizontal */
-            padding: 20px 0; 
-            position: relative;
-            background-color: #f8f9fa; /* Sesuaikan background section */
+            width: 100%; overflow: hidden; padding: 20px 0; 
+            position: relative; background-color: #f8f9fa;
         }
         
-        /* Track animasi */
         .testimonial-track {
             display: flex;
-            /* Lebar = (380px item) * (10 item total: 5 asli + 5 duplikat) = 3800px */
-            /* Gunakan calc agar presisi */
-            width: calc(380px * 10); 
+            /* Menggunakan variable CSS agar responsive */
+            width: calc(var(--testi-card-width) * 10); 
             animation: scroll 40s linear infinite;
         }
 
-        /* Item Wrapper */
         .testimonial-item {
-            width: 380px; /* Lebar fix */
-            padding: 0 15px; /* Spacing */
-            flex-shrink: 0; /* Wajib: agar item tidak mengecil tertekan flexbox */
+            width: var(--testi-card-width); /* Responsive Width */
+            padding: 0 15px; flex-shrink: 0;
         }
 
         .testi-card {
-            background: white;
-            border-radius: 20px;
-            padding: 35px 25px 25px;
-            height: 100%;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.3s;
-            position: relative;
-            margin-top: 40px; 
+            background: white; border-radius: 20px; padding: 35px 25px 25px;
+            height: 100%; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center; transition: transform 0.3s; position: relative; margin-top: 40px; 
         }
-        
-        .testi-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(13, 110, 253, 0.15); 
-        }
+        .testi-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(13, 110, 253, 0.15); }
 
         .testi-avatar {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: absolute;
-            top: -40px; 
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
+            width: 75px; height: 75px; border-radius: 50%; object-fit: cover;
+            border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: absolute; top: -40px; left: 50%; transform: translateX(-50%); z-index: 2;
         }
 
-        /* KEYFRAMES ANIMATION FIX */
         @keyframes scroll {
-            0% { 
-                transform: translateX(0); 
-            }
-            100% { 
-                /* Geser sejauh lebar total 5 item ASLI saja (bukan 10) */
-                /* 5 item * 380px = 1900px */
-                transform: translateX(calc(-380px * 5)); 
-            }
+            0% { transform: translateX(0); }
+            /* Geser sejauh 5 item */
+            100% { transform: translateX(calc(var(--testi-card-width) * -5)); }
         }
-        /* Penjelasan Logika:
-           Saat animasi mencapai 100% (geser 5 item), posisi visualnya 
-           akan sama persis dengan posisi awal karena Item ke-6 adalah duplikat Item ke-1.
-           Animasi akan 'snap' kembali ke 0 secara instan tanpa terlihat mata. 
-        */
         
-        /* Pause saat hover */
-        .testimonial-full-width:hover .testimonial-track {
-            animation-play-state: paused;
-        }
-
+        .testimonial-full-width:hover .testimonial-track { animation-play-state: paused; }
 
         /* --- Pricing Section --- */
         .pricing-section { background: linear-gradient(180deg, #ffffff 0%, #f1f8ff 100%); }
@@ -233,33 +204,46 @@
         }
         .social-icon:hover { background: var(--primary-blue); color: white; }
 
-        /* --- FLOATING CS BUTTON --- */
+        /* --- Floating CS --- */
         .float-cs {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 8px 20px; 
-            border-radius: 50px;
+            position: fixed; bottom: 30px; right: 30px;
+            background-color: var(--primary-blue); color: white;
+            padding: 8px 20px; border-radius: 50px;
             box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
+            z-index: 9999; display: flex; align-items: center;
+            text-decoration: none; transition: all 0.3s ease; font-weight: 600; font-size: 0.9rem;
         }
         .float-cs:hover {
-            background-color: var(--dark-blue);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
+            background-color: var(--dark-blue); color: white;
+            transform: translateY(-3px); box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
         }
-        .float-cs i {
-            font-size: 1.2rem;
-            margin-right: 8px;
+        .float-cs i { font-size: 1.2rem; margin-right: 8px; }
+
+        /* --- MEDIA QUERY KHUSUS MOBILE (PERBAIKAN UTAMA) --- */
+        @media (max-width: 991px) {
+            .navbar { padding: 0.8rem 0; } /* Padding navbar lebih kecil */
+            
+            .hero-section {
+                padding-top: 100px;
+                min-height: auto; /* Hilangkan tinggi layar penuh */
+                padding-bottom: 60px;
+                text-align: center; /* Center text di HP */
+            }
+            .hero-title { font-size: 2.2rem; } /* Font judul lebih kecil */
+            .hero-subtitle { margin: 0 auto 2rem; font-size: 1rem; }
+            .hero-img { max-height: 40vh; margin-bottom: 2rem; } /* Gambar lebih kecil */
+            
+            .section-padding { padding: 60px 0; } /* Jarak antar section dirapatkan */
+            
+            .step-line::after { display: none; } /* Hilangkan garis alur di HP */
+            .step-card { margin-bottom: 20px; }
+            
+            .pricing-body .price-main { font-size: 2.8rem; }
+            
+            .info-sidebar { padding-left: 0; margin-top: 40px; } /* Reset padding sidebar */
+            
+            .btn-primary-custom, .btn-outline-custom { width: 100%; display: block; margin-bottom: 10px; } /* Tombol full width */
+            .d-flex.gap-3 { display: block !important; } /* Stack tombol hero */
         }
     </style>
 </head>
@@ -270,18 +254,18 @@
             <a class="navbar-brand" href="#">
                 <i class="bi bi-layers-half me-2"></i>MindUp
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
+                <ul class="navbar-nav ms-auto align-items-center text-center text-lg-start pt-3 pt-lg-0">
                     <li class="nav-item"><a class="nav-link active" href="#beranda">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="#fitur">Fitur</a></li>
                     <li class="nav-item"><a class="nav-link" href="#tentang">Tentang</a></li>
                     <li class="nav-item"><a class="nav-link" href="#alur">Alur Belajar</a></li>
                     <li class="nav-item"><a class="nav-link" href="#harga">Lisensi</a></li>
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a href="login.html" class="btn btn-primary-custom shadow-sm">Aktivasi Sekolah</a>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0 w-100 w-lg-auto">
+                        <a href="login.html" class="btn btn-primary-custom shadow-sm w-100">Aktivasi Sekolah</a>
                     </li>
                 </ul>
             </div>
@@ -292,7 +276,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-right" data-aos-duration="1000">
-                    <span class="badge bg-light text-primary border mb-3 px-3 py-2 rounded-pill">Penelitian BIMA 2025</span>
+                    <span class="badge bg-light text-primary border mb-3 px-3 py-2 rounded-pill d-inline-block">Penelitian BIMA 2025</span>
                     <h1 class="hero-title">Bangun Resiliensi Siswa dengan NLP</h1>
                     <p class="hero-subtitle">
                         Modul digital interaktif yang menggabungkan teknik <strong>Neuro-Linguistic Programming</strong> dan <strong>Jurnal Refleksi Diri</strong> untuk membantu siswa membangun mental tangguh.
@@ -302,7 +286,7 @@
                         <a href="#fitur" class="btn btn-outline-custom">Lihat Fitur</a>
                     </div>
                 </div>
-                <div class="col-lg-6 order-1 order-lg-2 text-center mb-5 mb-lg-0" data-aos="fade-left" data-aos-duration="1000">
+                <div class="col-lg-6 order-1 order-lg-2 text-center mb-4 mb-lg-0" data-aos="fade-left" data-aos-duration="1000">
                     <img src="assets/hero.svg" alt="Ilustrasi Edukasi" class="hero-img">
                 </div>
             </div>
@@ -316,60 +300,60 @@
                 <p>Platform pembelajaran fokus pada materi esensial dan refleksi mandiri.</p>
             </div>
             <div class="row g-4">
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-speedometer2"></i></div>
-                        <h5 class="fw-bold">Dashboard Interaktif</h5>
-                        <p class="text-muted small">Akses materi cepat dengan tampilan yang bersih.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-speedometer2"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Dashboard</h5>
+                        <p class="text-muted small">Akses materi cepat.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-info-circle"></i></div>
-                        <h5 class="fw-bold">Tujuan Pembelajaran</h5>
-                        <p class="text-muted small">Penjelasan terstruktur mengenai konsep resiliensi.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-info-circle"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Tujuan</h5>
+                        <p class="text-muted small">Konsep resiliensi.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-play-circle"></i></div>
-                        <h5 class="fw-bold">Materi Multimedia</h5>
-                        <p class="text-muted small">Belajar via teks, audio, dan infografis menarik.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-play-circle"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Multimedia</h5>
+                        <p class="text-muted small">Belajar via audio/video.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-person-check"></i></div>
-                        <h5 class="fw-bold">Eksplorasi Emosi</h5>
-                        <p class="text-muted small">Panduan mengenali perasaan dan potensi diri sendiri.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-person-check"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Emosi</h5>
+                        <p class="text-muted small">Kenali perasaan diri.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-mic"></i></div>
-                        <h5 class="fw-bold">Audio Panduan NLP</h5>
-                        <p class="text-muted small">Instruksi suara untuk teknik relaksasi & anchor.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-mic"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Audio NLP</h5>
+                        <p class="text-muted small">Panduan teknik anchor.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-journal-richtext"></i></div>
-                        <h5 class="fw-bold">Jurnal Refleksi</h5>
-                        <p class="text-muted small">Catatan harian privat untuk menuangkan emosi.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-journal-richtext"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Jurnal</h5>
+                        <p class="text-muted small">Catatan harian privat.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-book-half"></i></div>
-                        <h5 class="fw-bold">Studi Kasus</h5>
-                        <p class="text-muted small">Cerita inspiratif penerapan resiliensi siswa.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-book-half"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Studi Kasus</h5>
+                        <p class="text-muted small">Cerita inspiratif.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="bi bi-music-note-beamed"></i></div>
-                        <h5 class="fw-bold">Terapi Suara</h5>
-                        <p class="text-muted small">Kumpulan audio untuk ketenangan pikiran.</p>
+                <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card text-center text-md-start">
+                        <div class="feature-icon mx-auto mx-md-0"><i class="bi bi-music-note-beamed"></i></div>
+                        <h5 class="fw-bold fs-6 fs-md-5">Terapi</h5>
+                        <p class="text-muted small">Audio ketenangan.</p>
                     </div>
                 </div>
             </div>
@@ -410,46 +394,40 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="row">
-                        <div class="col-md-2 col-6 step-line" data-aos="fade-up" data-aos-delay="100">
+                        <div class="col-md-2 col-4 step-line" data-aos="fade-up" data-aos-delay="100">
                             <div class="step-card">
                                 <div class="step-number">1</div>
-                                <h6 class="fw-bold">Beranda</h6>
-                                <p class="small text-muted">Akses Modul</p>
+                                <h6 class="fw-bold" style="font-size: 0.9rem;">Beranda</h6>
                             </div>
                         </div>
-                        <div class="col-md-2 col-6 step-line" data-aos="fade-up" data-aos-delay="200">
+                        <div class="col-md-2 col-4 step-line" data-aos="fade-up" data-aos-delay="200">
                             <div class="step-card">
                                 <div class="step-number">2</div>
-                                <h6 class="fw-bold">Materi</h6>
-                                <p class="small text-muted">Konsep NLP</p>
+                                <h6 class="fw-bold" style="font-size: 0.9rem;">Materi</h6>
                             </div>
                         </div>
-                        <div class="col-md-2 col-6 step-line" data-aos="fade-up" data-aos-delay="300">
+                        <div class="col-md-2 col-4 step-line" data-aos="fade-up" data-aos-delay="300">
                             <div class="step-card">
                                 <div class="step-number">3</div>
-                                <h6 class="fw-bold">Latihan</h6>
-                                <p class="small text-muted">Praktik Audio</p>
+                                <h6 class="fw-bold" style="font-size: 0.9rem;">Latihan</h6>
                             </div>
                         </div>
-                        <div class="col-md-2 col-6 step-line" data-aos="fade-up" data-aos-delay="400">
+                        <div class="col-md-2 col-4 step-line" data-aos="fade-up" data-aos-delay="400">
                             <div class="step-card">
                                 <div class="step-number">4</div>
-                                <h6 class="fw-bold">Refleksi</h6>
-                                <p class="small text-muted">Jurnal Digital</p>
+                                <h6 class="fw-bold" style="font-size: 0.9rem;">Refleksi</h6>
                             </div>
                         </div>
-                        <div class="col-md-2 col-6 step-line" data-aos="fade-up" data-aos-delay="500">
+                        <div class="col-md-2 col-4 step-line" data-aos="fade-up" data-aos-delay="500">
                             <div class="step-card">
                                 <div class="step-number">5</div>
-                                <h6 class="fw-bold">Penerapan</h6>
-                                <p class="small text-muted">Aksi Nyata</p>
+                                <h6 class="fw-bold" style="font-size: 0.9rem;">Aksi</h6>
                             </div>
                         </div>
-                         <div class="col-md-2 col-6" data-aos="fade-up" data-aos-delay="600">
+                         <div class="col-md-2 col-4" data-aos="fade-up" data-aos-delay="600">
                             <div class="step-card">
                                 <div class="step-number"><i class="bi bi-check-lg" style="font-size: 1.1rem;"></i></div>
-                                <h6 class="fw-bold">Selesai</h6>
-                                <p class="small text-muted">Modul Tuntas</p>
+                                <h6 class="fw-bold" style="font-size: 0.9rem;">Selesai</h6>
                             </div>
                         </div>
                     </div>
@@ -459,7 +437,6 @@
     </section>
 
     <section class="section-padding" style="background-color: #f8f9fa;">
-        
         <div class="container">
             <div class="section-title" data-aos="fade-up">
                 <h2>Apa Kata Mereka?</h2>
@@ -469,25 +446,22 @@
 
         <div class="testimonial-full-width">
             <div class="testimonial-track">
-                
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
                         <h6 class="fw-bold mb-1 mt-3">Rina A.</h6>
                         <span class="badge bg-light text-primary mb-3">Siswa Kelas XI</span>
-                        <p class="text-muted small fst-italic">"Teknik 'Anchor' di modul ini sangat membantu saya merasa lebih tenang saat mau ujian. Audio panduannya pas banget."</p>
+                        <p class="text-muted small fst-italic">"Teknik 'Anchor' di modul ini sangat membantu saya merasa lebih tenang saat mau ujian."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
                         <h6 class="fw-bold mb-1 mt-3">Ibu Sarah</h6>
                         <span class="badge bg-light text-success mb-3">Guru BK</span>
-                        <p class="text-muted small fst-italic">"Sistem lisensi sekolahnya praktis. Saya bisa membagikan akses ke siswa dengan mudah tanpa ribet registrasi."</p>
+                        <p class="text-muted small fst-italic">"Sistem lisensi sekolahnya praktis. Saya bisa membagikan akses ke siswa dengan mudah."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
@@ -496,7 +470,6 @@
                         <p class="text-muted small fst-italic">"Studi kasusnya relevan banget sama kehidupan sekolah. Saya jadi lebih paham cara ngontrol emosi."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
@@ -505,7 +478,6 @@
                         <p class="text-muted small fst-italic">"Jurnal refleksi digitalnya jadi tempat curhat yang aman dan privat. Suka banget karena gak ada yang nilai."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
@@ -514,25 +486,23 @@
                         <p class="text-muted small fst-italic">"Materi videonya gak ngebosenin. Saya belajar banyak tentang cara kontrol emosi di sini."</p>
                     </div>
                 </div>
-
+                
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
                         <h6 class="fw-bold mb-1 mt-3">Rina A.</h6>
                         <span class="badge bg-light text-primary mb-3">Siswa Kelas XI</span>
-                        <p class="text-muted small fst-italic">"Teknik 'Anchor' di modul ini sangat membantu saya merasa lebih tenang saat mau ujian. Audio panduannya pas banget."</p>
+                        <p class="text-muted small fst-italic">"Teknik 'Anchor' di modul ini sangat membantu saya merasa lebih tenang saat mau ujian."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
                         <h6 class="fw-bold mb-1 mt-3">Ibu Sarah</h6>
                         <span class="badge bg-light text-success mb-3">Guru BK</span>
-                        <p class="text-muted small fst-italic">"Sistem lisensi sekolahnya praktis. Saya bisa membagikan akses ke siswa dengan mudah tanpa ribet registrasi."</p>
+                        <p class="text-muted small fst-italic">"Sistem lisensi sekolahnya praktis. Saya bisa membagikan akses ke siswa dengan mudah."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
@@ -541,7 +511,6 @@
                         <p class="text-muted small fst-italic">"Studi kasusnya relevan banget sama kehidupan sekolah. Saya jadi lebih paham cara ngontrol emosi."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
@@ -550,7 +519,6 @@
                         <p class="text-muted small fst-italic">"Jurnal refleksi digitalnya jadi tempat curhat yang aman dan privat. Suka banget karena gak ada yang nilai."</p>
                     </div>
                 </div>
-
                 <div class="testimonial-item">
                     <div class="testi-card">
                         <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Avatar" class="testi-avatar">
@@ -645,7 +613,7 @@
 
     <footer id="kontak" class="footer">
         <div class="container">
-            <div class="row gy-4">
+            <div class="row gy-4 text-center text-md-start">
                 <div class="col-lg-4 col-md-6">
                     <h5 class="fw-bold text-dark mb-3">Modul Digital Interaktif</h5>
                     <p class="text-muted small">Program penelitian BIMA 2025 untuk peningkatan resiliensi siswa sekolah melalui pendekatan NLP dan teknologi multimedia.</p>
