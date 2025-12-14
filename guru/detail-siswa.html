@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Siswa - MindUp Guru</title>
+    
+    <link rel="icon" href="../assets/icon.icn" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --sidebar-width: 260px;
+            --bg-color: #f4f7fa;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* --- 1. SIDEBAR & MOBILE (KONSISTEN) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed; top: 0; left: 0;
+            background: white; border-right: 1px solid #e2e8f0;
+            padding: 24px; display: flex; flex-direction: column;
+            z-index: 1050; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .brand-logo {
+            display: flex; align-items: center; gap: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.25rem; color: var(--primary-color);
+            margin-bottom: 40px; text-decoration: none;
+        }
+        .brand-logo img { height: 32px; width: auto; }
+
+        .nav-item { margin-bottom: 8px; }
+        .nav-link {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+            color: var(--text-secondary); border-radius: 12px; font-weight: 500; transition: all 0.2s; text-decoration: none;
+        }
+        .nav-link:hover { background-color: #f1f5f9; color: var(--primary-color); }
+        .nav-link.active { background-color: #eff6ff; color: var(--primary-color); font-weight: 600; }
+        
+        .user-profile-mini { margin-top: auto; display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+        .mini-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+        .main-content { margin-left: var(--sidebar-width); padding: 32px 40px; min-height: 100vh; transition: margin-left 0.3s; }
+
+        .mobile-header {
+            display: none; align-items: center; justify-content: space-between;
+            padding: 15px 20px; background: white; border-bottom: 1px solid #e2e8f0;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1040;
+        }
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); z-index: 1045; display: none; backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.3s;
+        }
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 20px; padding-top: 90px; }
+            .mobile-header { display: flex; }
+            .sidebar-overlay.show { display: block; opacity: 1; }
+        }
+
+        /* --- 2. STYLE DETAIL PAGE --- */
+        .profile-header-card {
+            background: white; border-radius: 20px; padding: 30px;
+            border: 1px solid #e2e8f0; margin-bottom: 24px;
+            display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+        }
+
+        .student-bio { display: flex; gap: 20px; align-items: center; }
+        .large-avatar { 
+            width: 100px; height: 100px; border-radius: 50%; 
+            background: var(--primary-color); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: 700; border: 4px solid #eff6ff;
+        }
+
+        .action-panel { display: flex; gap: 10px; }
+
+        .chart-card {
+            background: white; border-radius: 20px; padding: 24px;
+            border: 1px solid #e2e8f0; height: 100%;
+        }
+
+        .journal-item {
+            background: white; border: 1px solid #f1f5f9; border-radius: 12px;
+            padding: 20px; margin-bottom: 12px; transition: 0.2s;
+        }
+        .journal-item:hover { border-color: #cbd5e1; transform: translateX(5px); }
+        .journal-date { font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; }
+        
+        .btn-back { 
+            display: inline-flex; align-items: center; gap: 8px; color: var(--text-secondary); 
+            text-decoration: none; font-weight: 600; margin-bottom: 20px; transition: 0.2s; 
+        }
+        .btn-back:hover { color: var(--primary-color); transform: translateX(-5px); }
+
+    </style>
+</head>
+<body>
+
+    <header class="mobile-header d-lg-none">
+        <a href="#" class="d-flex align-items-center text-decoration-none gap-2">
+            <img src="../assets/logo.svg" alt="MindUp Logo" height="28">
+            <span class="fw-bold text-primary" style="font-family: 'Plus Jakarta Sans'">MindUp</span>
+        </a>
+        <button class="btn btn-light border" onclick="toggleSidebar()">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+    </header>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="#" class="brand-logo mb-0">
+                <img src="../assets/logo.svg" alt="Logo">
+                MindUp Admin
+            </a>
+            <button class="btn btn-sm btn-light d-lg-none" onclick="toggleSidebar()"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link">
+                    <i class="bi bi-grid-fill"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="monitoring.html" class="nav-link">
+                    <i class="bi bi-activity"></i> Monitoring Jurnal
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="data-siswa.html" class="nav-link active">
+                    <i class="bi bi-people"></i> Data Siswa
+                </a>
+            </li>
+        </ul>
+
+        <div class="user-profile-mini">
+            <img src="https://ui-avatars.com/api/?name=Budi+S&background=0d6efd&color=fff" class="mini-avatar">
+            <div style="flex-grow: 1; overflow: hidden;">
+                <div class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;" id="sidebarName">Guru BK</div>
+                <div class="text-muted" style="font-size: 0.75rem;">Konselor</div>
+            </div>
+            <button class="btn btn-sm btn-light text-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i></button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <a href="javascript:history.back()" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar
+        </a>
+
+        <div class="profile-header-card">
+            <div class="student-bio">
+                <div class="large-avatar" id="detailAvatar">AD</div>
+                <div>
+                    <h3 class="fw-bold mb-1" id="detailName">Memuat...</h3>
+                    <p class="text-muted mb-2"><span id="detailClass">-</span> • NIS: <span id="detailNis">-</span></p>
+                    <div id="detailRiskBadge"></div>
+                </div>
+            </div>
+            
+            <div class="action-panel">
+                <button class="btn btn-outline-secondary" onclick="addNote()">
+                    <i class="bi bi-journal-plus me-2"></i>Catatan Internal
+                </button>
+                <button class="btn btn-primary" onclick="callCounseling()">
+                    <i class="bi bi-envelope-exclamation me-2"></i>Panggil Konseling
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                <div class="chart-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold m-0">Tren Kesehatan Mental</h5>
+                        <select class="form-select form-select-sm w-auto border-0 bg-light">
+                            <option>30 Hari Terakhir</option>
+                        </select>
+                    </div>
+                    <div style="height: 300px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-3">Riwayat Jurnal Terbaru</h5>
+                <div id="personalJournalList">
+                    </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="chart-card mb-4">
+                    <h6 class="fw-bold text-muted text-uppercase small mb-3">Statistik Personal</h6>
+                    
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+                        <span class="text-muted">Total Jurnal</span>
+                        <span class="fw-bold fs-5" id="statTotalJournal">0</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+                        <span class="text-muted">Rata-rata Mood</span>
+                        <span class="fw-bold fs-5 text-primary" id="statAvgMood">0%</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="text-muted">Status Konseling</span>
+                        <span class="badge bg-success bg-opacity-10 text-success" id="statStatus">Aktif</span>
+                    </div>
+                </div>
+
+                <div class="chart-card bg-light border-0">
+                    <h6 class="fw-bold mb-2">Kontak Wali Kelas</h6>
+                    <p class="small text-muted mb-3">Jika perlu koordinasi lebih lanjut.</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white p-2 rounded-circle shadow-sm text-primary">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold small">Ibu Ratna S.Pd</div>
+                            <div class="text-muted small">0812-3456-7890</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="script-guru.js"></script> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Nama Guru Sidebar
+            document.getElementById('sidebarName').innerText = localStorage.getItem('userName') || 'Guru BK';
+
+            // Ambil ID dari URL (contoh: detail-siswa.html?id=101)
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = parseInt(urlParams.get('id'));
+
+            // Load Data Siswa
+            loadStudentDetail(studentId);
+        });
+
+        function loadStudentDetail(id) {
+            // Cari siswa di dbStudents (script-guru.js)
+            const student = dbStudents.find(s => s.id === id);
+
+            if (!student) {
+                // Jika tidak ketemu (atau id kosong), default ke data pertama untuk demo
+                // Agar tidak error saat dibuka langsung tanpa parameter
+                return loadStudentDetail(101); 
+            }
+
+            // 1. Render Profil Header
+            document.getElementById('detailName').innerText = student.name;
+            document.getElementById('detailClass').innerText = student.class;
+            document.getElementById('detailNis').innerText = student.nis;
+            
+            // Avatar Initials
+            const initials = student.name.split(" ").map(n=>n[0]).join("").substring(0,2);
+            document.getElementById('detailAvatar').innerText = initials;
+            
+            // Risk Badge
+            document.getElementById('detailRiskBadge').innerHTML = getRiskBadge(student.riskLevel);
+
+            // 2. Render Statistik Kanan
+            document.getElementById('statTotalJournal').innerText = student.stats.journalCount;
+            document.getElementById('statAvgMood').innerText = student.stats.moodScore + '%';
+            document.getElementById('statStatus').innerText = student.status;
+
+            // 3. Filter Jurnal Siswa Ini
+            const myJournals = dbJournals.filter(j => j.studentId === id);
+            renderPersonalJournals(myJournals);
+
+            // 4. Render Chart (Simulasi Data Grafik)
+            initTrendChart(student.name);
+        }
+
+        function renderPersonalJournals(journals) {
+            const container = document.getElementById('personalJournalList');
+            container.innerHTML = '';
+
+            if(journals.length === 0) {
+                container.innerHTML = '<p class="text-muted small fst-italic">Belum ada entri jurnal.</p>';
+                return;
+            }
+
+            journals.forEach(j => {
+                const moodIcon = j.mood === 'happy' ? '😄' : (j.mood === 'sad' ? '😢' : '😐');
+                const dateStr = formatDate(j.date);
+                
+                const html = `
+                    <div class="journal-item">
+                        <div class="d-flex justify-content-between">
+                            <div class="journal-date">${dateStr}</div>
+                            <div>${getMoodBadge(j.mood)}</div>
+                        </div>
+                        <p class="mb-0 mt-2 text-dark">"${j.content}"</p>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function initTrendChart(name) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            
+            // Data Dummy Tren Emosi (30 Hari)
+            const labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
+            const dataPoints = [40, 55, 30, 65]; // Skor 0-100
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Skor Kesejahteraan Mental',
+                        data: dataPoints,
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4, // Membuat garis melengkung halus
+                        fill: true,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#0d6efd',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { borderDash: [5, 5] } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Skor: ${context.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Action Buttons ---
+        function callCounseling() {
+            Swal.fire({
+                title: 'Panggil Konseling?',
+                text: "Notifikasi undangan akan dikirim ke aplikasi siswa.",
+                icon: 'question',
+                input: 'textarea',
+                inputPlaceholder: 'Tulis pesan singkat (opsional)...',
+                showCancelButton: true,
+                confirmButtonText: 'Kirim Undangan',
+                confirmButtonColor: '#0d6efd'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Terikirim!', 'Undangan konseling telah dikirim.', 'success');
+                }
+            });
+        }
+
+        function addNote() {
+            Swal.fire({
+                title: 'Catatan Internal',
+                input: 'textarea',
+                inputLabel: 'Catatan hanya bisa dilihat oleh Guru BK',
+                inputPlaceholder: 'Tulis pengamatan Anda...',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                confirmButtonColor: '#64748b'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Disimpan', 'Catatan berhasil ditambahkan ke database.', 'success');
+                }
+            });
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
