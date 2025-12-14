@@ -232,8 +232,7 @@
                                 <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">Hujan Lembut</h6>
                                 <p class="text-muted small mb-0" style="font-size: 0.75rem;">Meredakan ketegangan.</p>
                             </div>
-                            <div class="playing-indicator"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-                            <audio id="audio-rain" src="../assets/hujan.mp3" loop></audio>
+                            <div class="playing-indicator" id="indicator-rain"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
                         </div>
                     </div>
 
@@ -244,8 +243,7 @@
                                 <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">Hutan Pagi</h6>
                                 <p class="text-muted small mb-0" style="font-size: 0.75rem;">Suara alam yang asri.</p>
                             </div>
-                            <div class="playing-indicator"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-                            <audio id="audio-forest" src="../assets/alam.mp3" loop></audio>
+                            <div class="playing-indicator" id="indicator-forest"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
                         </div>
                     </div>
 
@@ -256,8 +254,7 @@
                                 <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">Ombak Laut</h6>
                                 <p class="text-muted small mb-0" style="font-size: 0.75rem;">Ritme stabil & tenang.</p>
                             </div>
-                            <div class="playing-indicator"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-                            <audio id="audio-ocean" src="../assets/ombak.mp3" loop></audio>
+                            <div class="playing-indicator" id="indicator-ocean"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
                         </div>
                     </div>
 
@@ -268,8 +265,7 @@
                                 <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">White Noise</h6>
                                 <p class="text-muted small mb-0" style="font-size: 0.75rem;">Memblokir suara bising.</p>
                             </div>
-                            <div class="playing-indicator"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-                            <audio id="audio-white" src="../assets/noise.mp3" loop></audio>
+                            <div class="playing-indicator" id="indicator-white"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
                         </div>
                     </div>
 
@@ -277,6 +273,13 @@
             </div>
 
         </div>
+    </div>
+
+    <div style="position: absolute; top: -9999px; left: -9999px; visibility: hidden;">
+        <div id="player-rain"></div>
+        <div id="player-forest"></div>
+        <div id="player-ocean"></div>
+        <div id="player-white"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -317,9 +320,8 @@
             isBreathing = true;
             icon.classList.replace('bi-play-fill', 'bi-pause-fill');
             btn.classList.add('active');
-            
             breathCycle(); 
-            breathInterval = setInterval(breathCycle, 12000); // 4+4+4 = 12 detik
+            breathInterval = setInterval(breathCycle, 12000); // 12 detik
         }
 
         function stopBreathing() {
@@ -327,69 +329,87 @@
             clearInterval(breathInterval);
             icon.classList.replace('bi-pause-fill', 'bi-play-fill');
             btn.classList.remove('active');
-            
             label.innerText = "MULAI";
             circle.className = "breath-circle";
             ring.className = "breath-ring";
         }
 
-        function resetBreathing() {
-            stopBreathing();
-        }
+        function resetBreathing() { stopBreathing(); }
 
         function breathCycle() {
             if(!isBreathing) return;
-
-            // 1. Tarik (Inhale)
-            label.innerText = "TARIK (4s)";
-            circle.className = "breath-circle inhale";
-            ring.className = "breath-ring inhale";
-            
-            // 2. Tahan (Hold)
+            label.innerText = "TARIK (4s)"; circle.className = "breath-circle inhale"; ring.className = "breath-ring inhale";
             setTimeout(() => {
-                if(!isBreathing) return;
-                label.innerText = "TAHAN (4s)";
-                circle.className = "breath-circle hold";
-                ring.className = "breath-ring hold";
+                if(!isBreathing) return; label.innerText = "TAHAN (4s)"; circle.className = "breath-circle hold"; ring.className = "breath-ring hold";
             }, 4000);
-
-            // 3. Hembus (Exhale)
             setTimeout(() => {
-                if(!isBreathing) return;
-                label.innerText = "HEMBUS (4s)";
-                circle.className = "breath-circle exhale";
-                ring.className = "breath-ring exhale";
+                if(!isBreathing) return; label.innerText = "HEMBUS (4s)"; circle.className = "breath-circle exhale"; ring.className = "breath-ring exhale";
             }, 8000);
         }
 
-        // --- 2. LOGIKA AUDIO ---
-        let currentAudio = null;
-        let currentCard = null;
+        // --- 2. LOGIKA AUDIO YOUTUBE (HIDDEN PLAYERS) ---
+        
+        // Load YouTube IFrame API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        function toggleAudio(id, cardElement) {
-            const audioEl = document.getElementById(`audio-${id}`);
+        var players = {};
+        var currentPlayingType = null;
+        var currentCardElement = null;
 
-            // Jika klik audio yang sama yang sedang main -> Pause
-            if (currentAudio === audioEl && !audioEl.paused) {
-                audioEl.pause();
+        // Inisialisasi Player saat API Siap
+        function onYouTubeIframeAPIReady() {
+            // Hujan: AEXsmAjQlKI
+            createPlayer('rain', 'AEXsmAjQlKI');
+            // Alam (Hutan): 1LdS8b5ur7M
+            createPlayer('forest', '1LdS8b5ur7M');
+            // Ombak: lUMHocNVsk8
+            createPlayer('ocean', 'lUMHocNVsk8');
+            // Noise: NzCgI_i0PUg
+            createPlayer('white', 'NzCgI_i0PUg');
+        }
+
+        function createPlayer(type, videoId) {
+            players[type] = new YT.Player('player-' + type, {
+                height: '0', width: '0', // Hidden
+                videoId: videoId,
+                playerVars: { 'playsinline': 1, 'controls': 0, 'loop': 1, 'playlist': videoId }, // Loop config
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            // Deteksi jika video selesai (walau loop sudah aktif, jaga-jaga)
+            if (event.data === YT.PlayerState.ENDED) {
+                event.target.playVideo(); 
+            }
+        }
+
+        function toggleAudio(type, cardElement) {
+            // Jika klik yang sama -> Pause
+            if (currentPlayingType === type) {
+                players[type].pauseVideo();
                 cardElement.classList.remove('playing');
-                currentAudio = null;
-                currentCard = null;
+                currentPlayingType = null;
+                currentCardElement = null;
                 return;
             }
 
-            // Jika ada audio lain -> Matikan
-            if (currentAudio && currentAudio !== audioEl) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-                if(currentCard) currentCard.classList.remove('playing');
+            // Jika ada yang lain main -> Matikan dulu
+            if (currentPlayingType) {
+                players[currentPlayingType].pauseVideo();
+                if(currentCardElement) currentCardElement.classList.remove('playing');
             }
 
-            // Mainkan audio baru
-            audioEl.play();
+            // Mainkan yang baru
+            players[type].playVideo();
             cardElement.classList.add('playing');
-            currentAudio = audioEl;
-            currentCard = cardElement;
+            currentPlayingType = type;
+            currentCardElement = cardElement;
         }
     </script>
 </body>
