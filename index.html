@@ -126,11 +126,83 @@
             100% { opacity: 0.5; transform: translateX(0); }
         }
 
-        /* --- Documentation Gallery --- */
-        .doc-video-wrapper {
-            border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            margin-bottom: 50px; background: #000;
+        /* --- Documentation Gallery & Video Stack --- */
+        /* UPDATE: Styling untuk video tumpang tindih */
+        .video-stack-container {
+            position: relative;
+            width: 100%;
+            /* Aspect ratio 16:9 container */
+            padding-bottom: 56.25%; 
+            margin-bottom: 50px;
+            perspective: 1000px;
         }
+
+        .video-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            background: #000;
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* State 1: Active (Depan) */
+        .video-card.active {
+            z-index: 5;
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            pointer-events: auto; /* Bisa diklik */
+        }
+
+        /* State 2: Background (Belakang/Tumpang Tindih) */
+        .video-card.background {
+            z-index: 1;
+            /* Geser sedikit ke kanan dan perkecil agar terlihat seperti tumpukan */
+            transform: translateX(40px) scale(0.92); 
+            opacity: 0.5;
+            pointer-events: none; /* Tidak bisa diklik saat di belakang */
+            filter: blur(1px);
+        }
+
+        /* Navigation Buttons for Video */
+        .video-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            border: none;
+            color: var(--primary-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .video-nav-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .btn-vid-prev { left: -25px; }
+        .btn-vid-next { right: -25px; }
+
+        @media (max-width: 768px) {
+            .btn-vid-prev { left: -10px; width: 40px; height: 40px; font-size: 1rem; }
+            .btn-vid-next { right: -10px; width: 40px; height: 40px; font-size: 1rem; }
+            .video-card.background { transform: translateX(20px) scale(0.92); }
+        }
+
+        /* Gallery Styling (Existing) */
         .gallery-item {
             position: relative; border-radius: 15px; overflow: hidden; height: 300px; cursor: pointer;
         }
@@ -160,45 +232,18 @@
         }
         .team-role { color: var(--primary-blue); font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; }
 
-        /* Tambahan CSS untuk Team Card Ukuran Kecil */
         .team-card-small {
-            text-align: center; 
-            padding: 20px; 
-            background: white; 
-            border-radius: 15px;
-            box-shadow: var(--shadow-soft); 
-            transition: 0.3s; 
-            border: 1px solid #f0f0f0;
-            height: 100%;
+            text-align: center; padding: 20px; background: white; border-radius: 15px;
+            box-shadow: var(--shadow-soft); transition: 0.3s; border: 1px solid #f0f0f0; height: 100%;
         }
-        .team-card-small:hover { 
-            transform: translateY(-5px); 
-            box-shadow: var(--shadow-hover);
-        }
+        .team-card-small:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
         .team-card-small .team-img {
-            width: 80px; 
-            height: 80px; 
-            border-radius: 50%; 
-            object-fit: cover;
-            margin-bottom: 15px; 
-            border: 3px solid var(--light-blue-bg);
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+            margin-bottom: 15px; border: 3px solid var(--light-blue-bg);
         }
-        .team-card-small h6 { 
-            font-weight: 700; 
-            margin-bottom: 5px; 
-            font-family: 'Poppins', sans-serif;
-            color: var(--text-dark);
-        }
-        .team-card-small .team-role { 
-            font-size: 0.8rem; 
-            margin-bottom: 5px; 
-            color: var(--primary-blue);
-            font-weight: 600;
-        }
-        .team-card-small .small {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
+        .team-card-small h6 { font-weight: 700; margin-bottom: 5px; font-family: 'Poppins', sans-serif; color: var(--text-dark); }
+        .team-card-small .team-role { font-size: 0.8rem; margin-bottom: 5px; color: var(--primary-blue); font-weight: 600; }
+        .team-card-small .small { font-size: 0.75rem; color: var(--text-muted); }
 
         /* --- FAQ Section --- */
         .accordion-item { border: none; margin-bottom: 15px; border-radius: 15px !important; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
@@ -206,23 +251,6 @@
         .accordion-button:not(.collapsed) { color: var(--primary-blue); background-color: var(--light-blue-bg); box-shadow: none; }
         .accordion-button:focus { box-shadow: none; border-color: rgba(13,110,253,0.1); }
         .accordion-body { padding: 20px; color: var(--text-muted); line-height: 1.6; }
-
-        /* --- Testimonials (Infinite Scroll) --- */
-        .testimonial-full-width { width: 100%; overflow: hidden; padding: 20px 0; position: relative; background-color: #f8f9fa; }
-        .testimonial-track { display: flex; width: calc(380px * 10); animation: scroll 40s linear infinite; }
-        .testimonial-item { width: 380px; padding: 0 15px; flex-shrink: 0; }
-        .testi-card {
-            background: white; border-radius: 20px; padding: 35px 25px 25px; height: 100%;
-            border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center;
-            transition: transform 0.3s; position: relative; margin-top: 40px;
-        }
-        .testi-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(13, 110, 253, 0.15); }
-        .testi-avatar {
-            width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 4px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: absolute; top: -40px; left: 50%; transform: translateX(-50%); z-index: 2;
-        }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-380px * 5)); } }
-        .testimonial-full-width:hover .testimonial-track { animation-play-state: paused; }
 
         /* --- Footer & Float --- */
         .footer { background-color: #f8f9fa; padding: 50px 0 20px; border-top: 1px solid #e9ecef; }
@@ -436,19 +464,33 @@
             </div>
 
             <div class="row justify-content-center mb-5">
-                <div class="col-lg-8" data-aos="zoom-in">
-                    <div class="doc-video-wrapper ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/h-kMm2x5OpM" title="YouTube video player" allowfullscreen></iframe>
+                <div class="col-lg-8 position-relative" data-aos="zoom-in">
+                    
+                    <div class="video-stack-container">
+                        <div class="video-card active" id="vid1">
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/h-kMm2x5OpM" title="Video 1" frameborder="0" allowfullscreen></iframe>
+                        </div>
+
+                        <div class="video-card background" id="vid2">
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/QDpqcXGzFsM" title="Video 2" frameborder="0" allowfullscreen></iframe>
+                        </div>
                     </div>
+
+                    <button class="video-nav-btn btn-vid-prev" onclick="toggleVideoStack()">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="video-nav-btn btn-vid-next" onclick="toggleVideoStack()">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+
                 </div>
             </div>
-
             <div class="row g-4">
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="gallery-item">
                         <img src="https://uploads.onecompiler.io/4467dvrwg/447j3bqjx/1000004059.jpg" alt="Sosialisasi Kelas" class="gallery-img">
                         <div class="gallery-overlay">
-                            <div class="gallery-text"><h5>Sosialisasi Kelas</h5><p>Pengenalan teknik dasar NLP kepada siswa kelas X.</p></div>
+                            <div class="gallery-text"><h5>Praktik Self-Anchoring</h5><p>Siswa mempraktikkan teknik anchoring (jangkar emosi) untuk menciptakan ketenangan dan kestabilan diri saat menghadapi tekanan.</p></div>
                         </div>
                     </div>
                 </div>
@@ -456,7 +498,7 @@
                     <div class="gallery-item">
                         <img src="https://uploads.onecompiler.io/4467dvrwg/447j3bqjx/1000003987.jpg" alt="Praktik Kelompok" class="gallery-img">
                         <div class="gallery-overlay">
-                            <div class="gallery-text"><h5>Praktik Kelompok</h5><p>Siswa mencoba teknik 'Reframing' bersama teman.</p></div>
+                            <div class="gallery-text"><h5>Seminar Psikoedukasi</h5><p>Pemaparan konsep dasar resiliensi dan pengenalan metode NLP kepada warga sekolah sebagai langkah awal intervensi.</p></div>
                         </div>
                     </div>
                 </div>
@@ -464,7 +506,7 @@
                     <div class="gallery-item">
                         <img src="https://uploads.onecompiler.io/4467dvrwg/447j3bqjx/1000004070.jpg" alt="Evaluasi Guru" class="gallery-img">
                         <div class="gallery-overlay">
-                            <div class="gallery-text"><h5>Evaluasi Guru</h5><p>Diskusi tim pengajar mengenai dampak modul.</p></div>
+                            <div class="gallery-text"><h5>Simulasi Rapport & Empati</h5><p>Sesi praktik membangun kedekatan (building rapport) dan empati antar siswa dengan bimbingan fasilitator.</p></div>
                         </div>
                     </div>
                 </div>
@@ -472,7 +514,7 @@
                     <div class="gallery-item">
                         <img src="https://uploads.onecompiler.io/4467dvrwg/447j3bqjx/1000004015.jpg" alt="Sesi Konseling" class="gallery-img">
                         <div class="gallery-overlay">
-                            <div class="gallery-text"><h5>Sesi Konseling</h5><p>Penerapan jurnal refleksi dalam sesi konseling.</p></div>
+                            <div class="gallery-text"><h5>Teknik Six Step Reframing</h5><p>Penjelasan metode mengubah perilaku atau sudut pandang negatif menjadi positif melalui 6 langkah terstruktur NLP.</p></div>
                         </div>
                     </div>
                 </div>
@@ -480,7 +522,7 @@
                     <div class="gallery-item">
                         <img src="https://uploads.onecompiler.io/4467dvrwg/447j3rhpp/IMG_3821.JPG" alt="Penerapan Mandiri" class="gallery-img">
                         <div class="gallery-overlay">
-                            <div class="gallery-text"><h5>Penerapan Mandiri</h5><p>Siswa menggunakan audio terapi di perpustakaan.</p></div>
+                            <div class="gallery-text"><h5>Panduan Jurnal Refleksi</h5><p>Sosialisasi penggunaan lembar kerja atau jurnal mandiri untuk memantau perkembangan mental dan emosi siswa.</p></div>
                         </div>
                     </div>
                 </div>
@@ -533,7 +575,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
                     <div class="team-card-small">
-                        <img src="assets/Mahasiswa 2.JPG" alt="Anggota" class="team-img">
+                        <img src="assets/Mahasiswa 2.jpg" alt="Anggota" class="team-img">
                         <h6>Nandang Sugiarto</h6>
                         <p class="team-role">Anggota</p>
                         <p class="small mb-0">Mahasiswa Psikologi</p>
@@ -643,9 +685,19 @@
             offset: 100,
             duration: 800,
         });
+
+        // --- Logic Video Tumpang Tindih ---
+        function toggleVideoStack() {
+            const vid1 = document.getElementById('vid1');
+            const vid2 = document.getElementById('vid2');
+
+            // Cukup swap class 'active' dan 'background'
+            vid1.classList.toggle('active');
+            vid1.classList.toggle('background');
+            
+            vid2.classList.toggle('active');
+            vid2.classList.toggle('background');
+        }
     </script>
 </body>
 </html>
-
-
-
