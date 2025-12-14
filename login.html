@@ -266,7 +266,7 @@
             // Database Palsu dengan Struktur Folder Baru
             const users = {
                 // Siswa -> folder 'Siswa'
-                siswa: { u: 'siswa', p: 'siswa123', url: 'siswa/index.html', role: 'Siswa' },
+                siswa: { u: 'siswa', p: 'siswa123', url: 'Siswa/index.html', role: 'Siswa' },
                 
                 // Guru/Instansi -> folder 'instansi'
                 guru:  { u: 'guru',  p: 'guru123',  url: 'instansi/index.html', role: 'Instansi / Guru BK' },
@@ -323,7 +323,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Aktivasi siswa baru juga masuk ke folder siswa
-                        window.location.href = 'siswa/index.html';
+                        window.location.href = 'Siswa/index.html';
                     }
                 });
             } else {
@@ -339,3 +339,4 @@
 </body>
 
 </html>
+
