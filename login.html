@@ -41,7 +41,7 @@
             position: relative;
         }
 
-        .auth-row { min-height: 600px; /* Sedikit ditambah tingginya agar proporsional */ }
+        .auth-row { min-height: 600px; }
 
         /* Sidebar Kiri */
         .auth-sidebar {
@@ -84,11 +84,9 @@
             font-size: 0.85rem;
             font-weight: 600;
             background-color: transparent;
-            padding: 8px 12px; /* Sedikit padding agar area klik nyaman */
+            padding: 8px 12px;
             border-radius: 30px;
             transition: all 0.3s ease;
-            
-            /* Posisi Absolute yang Presisi */
             position: absolute;
             top: 30px;
             left: 40px;
@@ -97,13 +95,12 @@
 
         .btn-back-home:hover {
             color: var(--primary-blue);
-            background-color: #f8f9fa; /* Efek background tipis saat hover */
+            background-color: #f8f9fa;
             transform: translateX(-3px);
         }
 
         /* Navigasi Tabs */
         .nav-pills {
-            /* PERBAIKAN: Menambahkan margin-top agar tidak menabrak tombol Kembali */
             margin-top: 60px; 
             margin-bottom: 2rem;
         }
@@ -170,15 +167,13 @@
             .auth-form-container { padding: 30px; margin-top: 0; }
             
             .btn-back-home {
-                position: relative; /* Di mobile dikembalikan ke relative agar mengalir normal */
+                position: relative;
                 top: 0; left: 0;
                 margin-bottom: 20px;
                 display: inline-block;
             }
 
-            .nav-pills {
-                margin-top: 0; /* Reset margin di mobile */
-            }
+            .nav-pills { margin-top: 0; }
         }
     </style>
 </head>
@@ -312,17 +307,39 @@
             });
         }
 
-        // --- 1. LOGIKA LOGIN SIMULASI MULTI-ROLE (TETAP SAMA) ---
+        // --- 1. LOGIKA LOGIN SIMULASI MULTI-ROLE (UPDATED) ---
         function handleLogin(e) {
             e.preventDefault();
             
             const user = document.getElementById('loginUsername').value;
             const pass = document.getElementById('loginPassword').value;
 
+            // Database User Sederhana (Simulasi)
             const users = {
-                siswa: { u: 'siswa', p: 'siswa123', url: 'siswa/index.html', role: 'Siswa' },
-                guru:  { u: 'guru',  p: 'guru123',  url: 'instansi/index.html', role: 'Instansi / Guru BK' },
-                admin: { u: 'admin', p: 'admin123', url: 'superadmin/index.html', role: 'Super Admin' }
+                // Login Siswa
+                siswa: { 
+                    u: 'siswa', 
+                    p: 'siswa123', 
+                    url: 'siswa/index.html', 
+                    role: 'Siswa',
+                    name: 'Sobat MindUp'
+                },
+                // Login Guru (SESUAI REQUEST)
+                guru:  { 
+                    u: 'guru',  
+                    p: 'guru123',  
+                    url: 'guru/index.html', // Path disesuaikan ke folder 'guru'
+                    role: 'Guru', // Role disamakan dengan pengecekan di dashboard guru
+                    name: 'Bpk. Budi Santoso' // Nama untuk ditampilkan di dashboard
+                },
+                // Login Admin (Future Proofing)
+                admin: { 
+                    u: 'admin', 
+                    p: 'admin123', 
+                    url: 'superadmin/index.html', 
+                    role: 'Super Admin',
+                    name: 'Administrator'
+                }
             };
 
             let validUser = null;
@@ -334,14 +351,18 @@
             if (validUser) {
                 Swal.fire({
                     title: `Login Berhasil!`,
-                    text: `Selamat datang, ${validUser.role}. Mengalihkan...`,
+                    text: `Selamat datang, ${validUser.name}. Mengalihkan...`,
                     icon: 'success',
                     timer: 1500,
                     showConfirmButton: false,
                     didOpen: () => { Swal.showLoading(); }
                 }).then(() => {
+                    // Simpan sesi dan data user ke LocalStorage agar halaman tujuan bisa membacanya
                     localStorage.setItem('userRole', validUser.role);
+                    localStorage.setItem('userName', validUser.name);
                     localStorage.setItem('isLoggedIn', 'true');
+                    
+                    // Redirect ke halaman dashboard masing-masing
                     window.location.href = validUser.url;
                 });
             } else {
@@ -370,6 +391,10 @@
                     confirmButtonColor: '#0d6efd'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Default aktivasi masuk sebagai siswa
+                        localStorage.setItem('userRole', 'Siswa');
+                        localStorage.setItem('userName', 'Siswa Baru');
+                        localStorage.setItem('isLoggedIn', 'true');
                         window.location.href = 'siswa/index.html';
                     }
                 });
